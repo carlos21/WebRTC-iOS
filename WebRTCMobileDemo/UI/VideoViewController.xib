@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="VideoViewController" customModule="WebRTCMobileDemo" customModuleProvider="target">
+            <connections>
+                <outlet property="backButton" destination="cEu-UT-jTc" id="ukF-zQ-S0l"/>
+                <outlet property="localVideoView" destination="diX-KL-MXE" id="xMk-GM-GTW"/>
+                <outlet property="videoContainerView" destination="diX-KL-MXE" id="anR-ZR-amT"/>
+                <outlet property="view" destination="iRr-cu-rHp" id="meb-Fb-4FX"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iRr-cu-rHp">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="diX-KL-MXE">
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                </view>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cEu-UT-jTc" customClass="RoundButton" customModule="WebRTCMobileDemo" customModuleProvider="target">
+                    <rect key="frame" x="16" y="60" width="40" height="40"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="Jyx-bM-IpQ"/>
+                        <constraint firstAttribute="height" constant="40" id="f1l-6B-2fM"/>
+                    </constraints>
+                    <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <state key="normal" image="left-arrow"/>
+                    <userDefinedRuntimeAttributes>
+                        <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
+                            <real key="value" value="20"/>
+                        </userDefinedRuntimeAttribute>
+                    </userDefinedRuntimeAttributes>
+                    <connections>
+                        <action selector="onBackPressed:" destination="-1" eventType="touchUpInside" id="mRT-rP-RPX"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <constraints>
+                <constraint firstItem="cEu-UT-jTc" firstAttribute="leading" secondItem="UKg-mh-Die" secondAttribute="leading" constant="16" id="IPh-mU-0gW"/>
+                <constraint firstItem="cEu-UT-jTc" firstAttribute="top" secondItem="UKg-mh-Die" secondAttribute="top" constant="16" id="XRb-OQ-LRr"/>
+                <constraint firstItem="diX-KL-MXE" firstAttribute="top" secondItem="UKg-mh-Die" secondAttribute="top" id="bhc-D6-rSQ"/>
+                <constraint firstItem="diX-KL-MXE" firstAttribute="leading" secondItem="UKg-mh-Die" secondAttribute="leading" id="iUL-4S-sJA"/>
+                <constraint firstItem="UKg-mh-Die" firstAttribute="trailing" secondItem="diX-KL-MXE" secondAttribute="trailing" id="iv9-CZ-zkp"/>
+                <constraint firstItem="UKg-mh-Die" firstAttribute="bottom" secondItem="diX-KL-MXE" secondAttribute="bottom" id="yJr-3U-0tG"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="UKg-mh-Die"/>
+            <point key="canvasLocation" x="-401.44927536231887" y="18.75"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="left-arrow" width="24" height="24"/>
+    </resources>
+</document>
