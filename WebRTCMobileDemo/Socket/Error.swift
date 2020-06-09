@@ -13,3 +13,7 @@ enum WebRTCError: Error {
     case candidate(String)
     case type(String)
 }
+
+enum SignalingError: Error {
+    case join(String)
+}

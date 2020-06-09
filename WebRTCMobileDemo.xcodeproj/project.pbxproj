@@ -39,6 +39,7 @@
 		35CB175A248C4F82004D3378 /* LoadableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CB1759248C4F82004D3378 /* LoadableController.swift */; };
 		35DE6DB6248487E400C41906 /* Offer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DE6DB5248487E400C41906 /* Offer.swift */; };
 		35DE6DB824848C3000C41906 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DE6DB724848C3000C41906 /* Error.swift */; };
+		35F2B7A7248F447E00AB4EFD /* JoinEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F2B7A6248F447E00AB4EFD /* JoinEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -75,6 +76,7 @@
 		35CB1759248C4F82004D3378 /* LoadableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadableController.swift; sourceTree = "<group>"; };
 		35DE6DB5248487E400C41906 /* Offer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Offer.swift; sourceTree = "<group>"; };
 		35DE6DB724848C3000C41906 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		35F2B7A6248F447E00AB4EFD /* JoinEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinEvent.swift; sourceTree = "<group>"; };
 		4F4450D0C70447568205B4F0 /* Pods-WebRTCMobileDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebRTCMobileDemo.debug.xcconfig"; path = "Target Support Files/Pods-WebRTCMobileDemo/Pods-WebRTCMobileDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		804DC1C7A03223C7DBB09A02 /* Pods_WebRTCMobileDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WebRTCMobileDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E081147E83A4A62F364D6FB4 /* Pods-WebRTCMobileDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebRTCMobileDemo.release.xcconfig"; path = "Target Support Files/Pods-WebRTCMobileDemo/Pods-WebRTCMobileDemo.release.xcconfig"; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 				35AE48752478C13100D845E6 /* WebRTCClient.swift */,
 				35722FE92479C06900148880 /* RTCStates.swift */,
 				35722FF0247A31CB00148880 /* Config.swift */,
+				35F2B7A6248F447E00AB4EFD /* JoinEvent.swift */,
 			);
 			path = WebRTC;
 			sourceTree = "<group>";
@@ -318,6 +321,7 @@
 				356D084224776DB900D08EC6 /* URLComponents+Extension.swift in Sources */,
 				35CB1750248C25C3004D3378 /* AlertableController.swift in Sources */,
 				35722FEF2479FD3300148880 /* SocketIOWebSocket.swift in Sources */,
+				35F2B7A7248F447E00AB4EFD /* JoinEvent.swift in Sources */,
 				356D08492477947D00D08EC6 /* SignalingClient.swift in Sources */,
 				35722FEA2479C06900148880 /* RTCStates.swift in Sources */,
 				35722FED2479EF5B00148880 /* VideoViewController.swift in Sources */,

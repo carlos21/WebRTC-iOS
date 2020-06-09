@@ -50,9 +50,8 @@ class SocketIOWebSocket: WebSocketProvider {
         }
         
         socket.on("joined") { [weak self] data, ack in
-            guard let self = self else { return }
-//            print(">>> socket joined")
-            self.delegate?.webSocketDidJoin(self)
+            print(">>> socket joined")
+            self?.handleJoinEvent(data: data)
         }
         
         socket.on("offer") { [weak self] data, ack in
@@ -104,7 +103,6 @@ class SocketIOWebSocket: WebSocketProvider {
     }
     
     func send(sessionDescription: SessionDescription, type: SdpType) {
-        print(">>> sending ", type.socketEvent)
         let payload: [String: Any] = [
             "type": type.socketEvent,
             "sdp": ["type": type.socketEvent, "sdp": sessionDescription.sdp],
@@ -123,6 +121,19 @@ class SocketIOWebSocket: WebSocketProvider {
             "room": self.room
         ]
         self.socket.emit("candidate", payload)
+    }
+    
+    private func handleJoinEvent(data: [Any]) {
+        guard let dictionary = data.first as? Dictionary<String, Any> else { return }
+        
+        do {
+            let joined = try JoinEvent(from: dictionary)
+            self.delegate?.webSocket(self, didJoinWithEvent: joined)
+            
+        } catch let error {
+            print(error)
+            assertionFailure(error.localizedDescription)
+        }
     }
     
     private func handleRemoteDescription(data: [Any]) {

@@ -20,8 +20,8 @@ protocol WebSocketProvider: class {
 protocol WebSocketProviderDelegate: class {
     
     func webSocketDidConnect(_ webSocket: WebSocketProvider)
-    func webSocketDidJoin(_ webSocket: WebSocketProvider)
     func webSocketDidDisconnect(_ webSocket: WebSocketProvider)
+    func webSocket(_ webSocket: WebSocketProvider, didJoinWithEvent event: JoinEvent)
     func webSocket(_ webSocket: WebSocketProvider, didReceiveOffer remoteSdp: SessionDescription)
     func webSocket(_ webSocket: WebSocketProvider, didReceiveAnswer remoteSdp: SessionDescription)
     func webSocket(_ webSocket: WebSocketProvider, didReceiveCandidate candidate: IceCandidate)

@@ -78,11 +78,19 @@ extension SignalingClient: WebSocketProviderDelegate {
         self.delegate?.signalClientDidConnect(self)
     }
     
-    func webSocketDidJoin(_ webSocket: WebSocketProvider) {
+    func webSocket(_ webSocket: WebSocketProvider, didJoinWithEvent event: JoinEvent) {
         print(">>> webSocketDidJoin")
-        self.webRTCClient.offer { [weak self] sdp in
-            let sessionDescription = SessionDescription(from: sdp)
-            self?.webSocket.send(sessionDescription: sessionDescription, type: .offer)
+        
+        switch event.instruction {
+        case .sendOffer:
+            print(">>> Sending offer")
+            self.webRTCClient.createOffer { [weak self] sdp in
+                let sessionDescription = SessionDescription(from: sdp)
+                self?.webSocket.send(sessionDescription: sessionDescription, type: .offer)
+            }
+            
+        default:
+            break
         }
     }
     
@@ -101,7 +109,7 @@ extension SignalingClient: WebSocketProviderDelegate {
                 return
             }
             
-            self?.webRTCClient.answer { localSdp in
+            self?.webRTCClient.createAnswer { localSdp in
                 let sessionDescription = SessionDescription(from: localSdp)
                 self?.webSocket.send(sessionDescription: sessionDescription, type: .answer)
             }
@@ -140,10 +148,10 @@ extension SignalingClient: WebRTCClientDelegate {
     }
     
     func webRTCClient(_ client: WebRTCClient, negotiationNeeded peerConnection: RTCPeerConnection) {
-        print(">>> client:negotiationNeeded")
-        self.webRTCClient.offer { [weak self] sdp in
-            let sessionDescription = SessionDescription(from: sdp)
-            self?.webSocket.send(sessionDescription: sessionDescription, type: .offer)
-        }
+//        print(">>> client:negotiationNeeded")
+//        self.webRTCClient.offer { [weak self] sdp in
+//            let sessionDescription = SessionDescription(from: sdp)
+//            self?.webSocket.send(sessionDescription: sessionDescription, type: .offer)
+//        }
     }
 }

@@ -19,6 +19,8 @@ protocol WebRTCClientDelegate: class {
 
 final class WebRTCClient: NSObject {
     
+    // MARK: Properties
+    
     private static let factory: RTCPeerConnectionFactory = {
         RTCInitializeSSL()
         let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
@@ -41,6 +43,8 @@ final class WebRTCClient: NSObject {
     private var remoteVideoTrack: RTCVideoTrack?
     private var localDataChannel: RTCDataChannel?
     private var remoteDataChannel: RTCDataChannel?
+    
+    // MARK: Initialize
     
     @available(*, unavailable)
     override init() {
@@ -71,47 +75,18 @@ final class WebRTCClient: NSObject {
     
     // MARK: Signaling
     
-    func offer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
-        let constraints = RTCMediaConstraints(mandatoryConstraints: self.mediaConstraints, optionalConstraints: nil)
+    func createOffer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
+        let constraints = RTCMediaConstraints(mandatoryConstraints: self.mediaConstraints,
+                                              optionalConstraints: nil)
         self.peerConnection.offer(for: constraints) { [weak self] sdp, error in
-            
-            if let error = error {
-                print(">>> Error creating offer", error)
-                return
-            }
-            
-            guard let sdp = sdp else { return }
-            self?.peerConnection.setLocalDescription(sdp) { error in
-                
-                if let error = error {
-                    print(">>> Error setting local description offer", error)
-                    return
-                }
-                
-                completion(sdp)
-            }
+            self?.handleSessionDescription(sdp: sdp, error: error, completion: completion)
         }
     }
     
-    func answer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
+    func createAnswer(completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
         let constrains = RTCMediaConstraints(mandatoryConstraints: self.mediaConstraints, optionalConstraints: nil)
         self.peerConnection.answer(for: constrains) { [weak self] sdp, error in
-            
-            if let error = error {
-                print(">>> Error creating answer", error)
-                return
-            }
-            
-            guard let sdp = sdp else { return }
-            self?.peerConnection.setLocalDescription(sdp) { error in
-                
-                if let error = error {
-                    print(">>> Error setting local description answer", error)
-                    return
-                }
-                
-                completion(sdp)
-            }
+            self?.handleSessionDescription(sdp: sdp, error: error, completion: completion)
         }
     }
     
@@ -121,6 +96,11 @@ final class WebRTCClient: NSObject {
     
     func set(remoteCandidate: RTCIceCandidate) {
         self.peerConnection.add(remoteCandidate)
+    }
+    
+    func send(data: Data) {
+        let buffer = RTCDataBuffer(data: data, isBinary: true)
+        self.remoteDataChannel?.sendData(buffer)
     }
     
     // MARK: Media
@@ -220,9 +200,28 @@ final class WebRTCClient: NSObject {
         return dataChannel
     }
     
-    func send(data: Data) {
-        let buffer = RTCDataBuffer(data: data, isBinary: true)
-        self.remoteDataChannel?.sendData(buffer)
+    private func handleSessionDescription(sdp: RTCSessionDescription?,
+                                          error: Error?,
+                                          completion: @escaping (_ sdp: RTCSessionDescription) -> Void) {
+        if let error = error {
+            print(">>> Error creating offer", error)
+            return
+        }
+        
+        guard let sdp = sdp else {
+            print(">>> Session description is nil - offer")
+            return
+        }
+        
+        peerConnection.setLocalDescription(sdp, completionHandler: { error in
+            
+            if let error = error {
+                print(">>> Set local description failed", error)
+                return
+            }
+            
+            completion(sdp)
+        })
     }
 }
 
