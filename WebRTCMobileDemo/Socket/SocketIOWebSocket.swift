@@ -12,10 +12,16 @@ import WebRTC
 
 class SocketIOWebSocket: WebSocketProvider {
     
+    // MARK: - Properties
+    
     weak var delegate: WebSocketProviderDelegate?
+    
+    var observations: [ObjectIdentifier: Observation] = [:]
     var socket: SocketIOClient
     var manager: SocketManager
     var room: String
+    
+    // MARK: - Initialize
     
     init(url: URL, authToken: String, username: String, room: String, force: Bool) {
         let params: [String: Any] = [
@@ -34,6 +40,8 @@ class SocketIOWebSocket: WebSocketProvider {
     deinit {
         print("deinit SocketIOWebSocket")
     }
+    
+    // MARK: - Methods
     
     func registerEvents() {
         socket.on(clientEvent: .connect) { [weak self] data, ack in
@@ -81,6 +89,11 @@ class SocketIOWebSocket: WebSocketProvider {
             print("socket customerror", data)
         }
         
+        socket.on("message") { [weak self] data, ack in
+            print("socket message", data)
+            self?.handleMessage(data: data)
+        }
+        
         socket.on(clientEvent: .disconnect) { [weak self] data, ack in
             print("socket disconnected")
             guard let self = self else { return }
@@ -121,6 +134,29 @@ class SocketIOWebSocket: WebSocketProvider {
             "room": self.room
         ]
         self.socket.emit("candidate", payload)
+    }
+    
+    func send(message: ChatMessage) {
+        print(">>> sending message")
+        let payload: [String: Any] = [
+            "userId": message.user.displayName,
+            "displayName": message.user.displayName,
+            "text": message.text
+        ]
+        self.socket.emit("message", payload)
+    }
+    
+    private func handleMessage(data: [Any]) {
+        guard let dictionary = data.first as? Dictionary<String, Any> else { return }
+        
+        do {
+            let message = try ChatMessage(from: dictionary)
+            self.postEvent(.newMessage(message))
+            
+        } catch let error {
+            print(error)
+            assertionFailure(error.localizedDescription)
+        }
     }
     
     private func handleJoinEvent(data: [Any]) {

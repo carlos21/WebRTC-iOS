@@ -1,0 +1,73 @@
+require "pathname"
+
+fastlane_version "2.145.0"
+default_platform :ios
+xcversion(version: "11.5")
+setup_jenkins(derived_data_path: "./DerivedData")
+
+platform :ios do
+
+    before_all do
+        ENV["FASTLANE_DONT_STORE_PASSWORD"] = "0"
+        ENV["FASTLANE_USER"] = "darkzeratul64@gmail.com"
+        ENV["FASTLANE_PASSWORD"] = "MiPuchuxD21"
+        ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = "smlj-zsnt-vosu-fdoq"
+        ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
+    end
+
+    after_all do |lane|
+      
+    end
+
+    desc "Generate IPA file - UAT"
+    lane :uat do
+        # match(type: "appstore") # more information: https://codesigning.guide
+        # build your iOS app
+        gym(
+            configuration: "WebRTC UAT",
+            workspace: "WebRTCMobileDemo.xcworkspace",
+            scheme: "WebRTC UAT",
+            silent: true,
+            clean: true,
+            output_directory: "./build",
+            output_name: "WebRTC.ipa",
+            export_method: "app-store",
+            export_options: "fastlane/ExportOptionsAppStore.plist"
+        )
+    end
+
+    desc "Submit a new Beta Build to Apple TestFlight"
+    lane :deploy_itunes do
+        # puts latest_testflight_build_number(live: true)
+        uat()
+        upload_testflight()
+    end
+
+    lane :upload_testflight do |options|
+        upload_to_testflight(
+            ipa: './build/WebRTC.ipa',
+            skip_submission: true
+        )
+    end
+
+    def on_error(exception)
+        send_slack_notification("Something went wrong", false, exception)
+    end
+
+    def print_exception(exception)
+        puts "#{exception.class}"
+        puts exception.backtrace.join("\n")
+    end
+
+end
+
+
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://docs.fastlane.tools/actions
+
+# fastlane reports which actions are used
+# No personal data is recorded. Learn more at https://github.com/fastlane/enhancer
+
+
+

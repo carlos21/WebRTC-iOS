@@ -11,10 +11,18 @@ import WebRTC
 
 protocol SignalClientDelegate: class {
  
-    func signalClientDidConnect(_ signalClient: SignalingClient)
-    func signalClientDidDisconnect(_ signalClient: SignalingClient)
+    func signalClient(_ signalClient: SignalingClient, didChangeJoiningState state: JoiningState)
     func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription)
     func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate)
+    func signalClient(_ signalClient: SignalingClient, didChangeState state: MeetingState)
+}
+
+extension SignalClientDelegate {
+    
+    func signalClient(_ signalClient: SignalingClient, didChangeJoiningState state: JoiningState) { }
+    func signalClient(_ signalClient: SignalingClient, didReceiveRemoteSdp sdp: RTCSessionDescription) { }
+    func signalClient(_ signalClient: SignalingClient, didReceiveCandidate candidate: RTCIceCandidate) { }
+    func signalClient(_ signalClient: SignalingClient, didChangeState state: MeetingState) { }
 }
 
 final class SignalingClient {
@@ -75,11 +83,15 @@ extension SignalingClient: WebSocketProviderDelegate {
     func webSocketDidConnect(_ webSocket: WebSocketProvider) {
         print(">>> webSocketDidConnect")
         state.value = .connected
-        self.delegate?.signalClientDidConnect(self)
     }
     
     func webSocket(_ webSocket: WebSocketProvider, didJoinWithEvent event: JoinEvent) {
         print(">>> webSocketDidJoin")
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.signalClient(self, didChangeJoiningState: .joined)
+        }
         
         switch event.instruction {
         case .sendOffer:
@@ -97,7 +109,13 @@ extension SignalingClient: WebSocketProviderDelegate {
     func webSocketDidDisconnect(_ webSocket: WebSocketProvider) {
         print(">>> webSocketDidDisconnect")
         state.value = .disconnected
-        self.delegate?.signalClientDidDisconnect(self)
+        
+        // TODO - Detect if there was an error from the server
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.signalClient(self, didChangeJoiningState: .disconnected(.userCancel))
+        }
     }
     
     func webSocket(_ webSocket: WebSocketProvider, didReceiveOffer remoteSdp: SessionDescription) {
@@ -129,6 +147,10 @@ extension SignalingClient: WebSocketProviderDelegate {
         print(">>> webSocket:didReceiveCandidate")
         self.webRTCClient.set(remoteCandidate: candidate.rtcIceCandidate)
     }
+    
+    func webSocket(_ webSocket: WebSocketProvider, didReceiveChatMessage message: ChatMessage) {
+        
+    }
 }
 
 extension SignalingClient: WebRTCClientDelegate {
@@ -141,6 +163,21 @@ extension SignalingClient: WebRTCClientDelegate {
     
     func webRTCClient(_ client: WebRTCClient, didChangeConnectionState state: RTCIceConnectionState) {
         print(">>> client:didChangeConnectionState:state", state.description)
+        
+        let meetingState: MeetingState
+        switch state {
+        case .connected:
+            meetingState = .active
+            
+        case .checking:
+            meetingState = .connectingToPartner
+            
+        default:
+            meetingState = .waitingForPartner
+        }
+        
+        
+        self.delegate?.signalClient(self, didChangeState: meetingState)
     }
     
     func webRTCClient(_ client: WebRTCClient, didReceiveData data: Data) {

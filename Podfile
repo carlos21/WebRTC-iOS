@@ -3,6 +3,7 @@ platform :ios, '11.0'
 target 'WebRTCMobileDemo' do
   use_frameworks!
   
+    pod 'MessageKit'
     pod 'GoogleWebRTC'
     pod 'Socket.IO-Client-Swift'
     pod 'SVProgressHUD'

@@ -22,19 +22,19 @@ struct Remote {
     
     static func run<T: Decodable>(_ request: URLRequest,
                                   completion: @escaping (Result<T, Error>) -> Void) {
-        print(">>> 0")
         let task = self.session.dataTask(with: request) { data, response, error in
             guard let data = data else { return }
-            print(">>> 1")
             DispatchQueue.main.async {
                 
-                print(">>> 2")
                 if let error = error {
                     completion(.failure(error))
                     return
                 }
-                print(">>> 3")
+                
                 do {
+                    let string = String(data: data, encoding: .utf8)
+                    print("raw response:", string ?? "")
+                    
                     let response = try JSONDecoder().decode(T.self, from: data)
                     completion(.success(response))
                 } catch let error {

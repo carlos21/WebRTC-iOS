@@ -61,12 +61,12 @@ class EnterRoomViewController: UIViewController, AlertableController, LoadableCo
         AuthorizationService.authorize(username: username) { [weak self] result in
             guard let self = self else { return }
             self.hideLoading()
-            
+
             switch result {
             case .success(let response):
                 let videoController = VideoViewController(authToken: response.token, username: username, room: room)
                 self.navigationController?.pushViewController(videoController, animated: true)
-                
+
             case .failure(let error):
                 self.show(message: error.localizedDescription)
             }

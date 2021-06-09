@@ -30,6 +30,15 @@ class NavigationController: UINavigationController {
         setup()
     }
     
+    convenience init(rootViewController: UIViewController, navigationBarHidden: Bool = true) {
+        self.init(rootViewController: rootViewController)
+        setup(navigationBarHidden: navigationBarHidden)
+    }
+    
+    override open var childForStatusBarHidden: UIViewController? {
+        return self.topViewController
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
@@ -51,15 +60,15 @@ class NavigationController: UINavigationController {
 //        return .darkContent
 //    }
     
-    func setup() {
-        modalPresentationStyle = .fullScreen
+    func setup(navigationBarHidden: Bool = true) {
+        modalPresentationStyle = .pageSheet
         interactivePopGestureRecognizer?.delegate = self
-        navigationBar.isHidden = true
+        navigationBar.isHidden = navigationBarHidden
     }
     
     func setupUI() {
         let largeTitleColor: UIColor = .white
-        let backgoundColor: UIColor = .blue
+        let backgoundColor: UIColor = .gray11c
         
         if #available(iOS 13.0, *) {
             let navBarAppearance = UINavigationBarAppearance()

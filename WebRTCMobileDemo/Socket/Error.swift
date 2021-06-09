@@ -16,4 +16,9 @@ enum WebRTCError: Error {
 
 enum SignalingError: Error {
     case join(String)
+    case userCancel
+}
+
+enum ChatError: Error {
+    case message
 }

@@ -1,0 +1,10 @@
+app_identifier "com.landgorilla.webrtcdemo" # The bundle identifier of your app
+
+apple_dev_portal_id "cduclos@landgorilla.com"  # Apple Developer Account
+itunes_connect_id "darkzeratul64@gmail.com"     # App Store Connect Account
+
+team_id "A5FP7L6CSA" # Developer Portal Team ID
+itc_team_id "118994333" # App Store Connect Team ID 17777800 (GTL), 55062800 (ME), 118994333 (LandGorilla)
+
+# you can even provide different app identifiers, Apple IDs and team names per lane:
+# More information: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Appfile.md

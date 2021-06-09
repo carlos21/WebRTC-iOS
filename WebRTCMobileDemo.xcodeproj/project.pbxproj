@@ -29,7 +29,9 @@
 		35722FF1247A31CB00148880 /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35722FF0247A31CB00148880 /* Config.swift */; };
 		35722FF3247A4B4300148880 /* VideoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35722FF2247A4B4300148880 /* VideoViewController.xib */; };
 		35722FF5247A4B4F00148880 /* EnterRoomViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 35722FF4247A4B4F00148880 /* EnterRoomViewController.xib */; };
+		35A387FD2495C9D6003753F5 /* JoiningState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35A387FC2495C9D6003753F5 /* JoiningState.swift */; };
 		35AE48762478C13100D845E6 /* WebRTCClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AE48752478C13100D845E6 /* WebRTCClient.swift */; };
+		35AEEF432494B57D00DF7F40 /* MeetingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AEEF422494B57D00DF7F40 /* MeetingState.swift */; };
 		35AFCCD2247B2EDF00A02D9B /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35AFCCD1247B2EDF00A02D9B /* NavigationController.swift */; };
 		35CB1750248C25C3004D3378 /* AlertableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CB174F248C25C3004D3378 /* AlertableController.swift */; };
 		35CB1752248C2FA6004D3378 /* RoundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CB1751248C2FA6004D3378 /* RoundButton.swift */; };
@@ -39,11 +41,18 @@
 		35CB175A248C4F82004D3378 /* LoadableController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35CB1759248C4F82004D3378 /* LoadableController.swift */; };
 		35DE6DB6248487E400C41906 /* Offer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DE6DB5248487E400C41906 /* Offer.swift */; };
 		35DE6DB824848C3000C41906 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DE6DB724848C3000C41906 /* Error.swift */; };
+		35EB106F24A007D600E63545 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB106E24A007D600E63545 /* ChatViewController.swift */; };
+		35EB107424A02AB800E63545 /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB107324A02AB800E63545 /* DateFormatter.swift */; };
+		35EB107724A02B7300E63545 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB107624A02B7300E63545 /* ChatMessage.swift */; };
+		35EB107924A02EA200E63545 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB107824A02EA200E63545 /* UIColor.swift */; };
+		35EB107B24A02F1800E63545 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB107A24A02F1800E63545 /* SampleData.swift */; };
+		35EB107D24A02F5D00E63545 /* Lorem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB107C24A02F5D00E63545 /* Lorem.swift */; };
+		35EB107F24A04B6000E63545 /* WebSocketProviderObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35EB107E24A04B6000E63545 /* WebSocketProviderObserver.swift */; };
 		35F2B7A7248F447E00AB4EFD /* JoinEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35F2B7A6248F447E00AB4EFD /* JoinEvent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		356D082424775EBC00D08EC6 /* WebRTCMobileDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WebRTCMobileDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		356D082424775EBC00D08EC6 /* WebRTC Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WebRTC Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		356D082724775EBC00D08EC6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		356D082B24775EBC00D08EC6 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		356D083024775EBF00D08EC6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -66,7 +75,9 @@
 		35722FF0247A31CB00148880 /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		35722FF2247A4B4300148880 /* VideoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = VideoViewController.xib; sourceTree = "<group>"; };
 		35722FF4247A4B4F00148880 /* EnterRoomViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EnterRoomViewController.xib; sourceTree = "<group>"; };
+		35A387FC2495C9D6003753F5 /* JoiningState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoiningState.swift; sourceTree = "<group>"; };
 		35AE48752478C13100D845E6 /* WebRTCClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebRTCClient.swift; sourceTree = "<group>"; };
+		35AEEF422494B57D00DF7F40 /* MeetingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MeetingState.swift; sourceTree = "<group>"; };
 		35AFCCD1247B2EDF00A02D9B /* NavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationController.swift; sourceTree = "<group>"; };
 		35CB174F248C25C3004D3378 /* AlertableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertableController.swift; sourceTree = "<group>"; };
 		35CB1751248C2FA6004D3378 /* RoundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundButton.swift; sourceTree = "<group>"; };
@@ -76,6 +87,13 @@
 		35CB1759248C4F82004D3378 /* LoadableController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadableController.swift; sourceTree = "<group>"; };
 		35DE6DB5248487E400C41906 /* Offer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Offer.swift; sourceTree = "<group>"; };
 		35DE6DB724848C3000C41906 /* Error.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
+		35EB106E24A007D600E63545 /* ChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		35EB107324A02AB800E63545 /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		35EB107624A02B7300E63545 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		35EB107824A02EA200E63545 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		35EB107A24A02F1800E63545 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		35EB107C24A02F5D00E63545 /* Lorem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lorem.swift; sourceTree = "<group>"; };
+		35EB107E24A04B6000E63545 /* WebSocketProviderObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketProviderObserver.swift; sourceTree = "<group>"; };
 		35F2B7A6248F447E00AB4EFD /* JoinEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinEvent.swift; sourceTree = "<group>"; };
 		4F4450D0C70447568205B4F0 /* Pods-WebRTCMobileDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WebRTCMobileDemo.debug.xcconfig"; path = "Target Support Files/Pods-WebRTCMobileDemo/Pods-WebRTCMobileDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		804DC1C7A03223C7DBB09A02 /* Pods_WebRTCMobileDemo.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WebRTCMobileDemo.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -107,7 +125,7 @@
 		356D082524775EBC00D08EC6 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				356D082424775EBC00D08EC6 /* WebRTCMobileDemo.app */,
+				356D082424775EBC00D08EC6 /* WebRTC Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -115,9 +133,11 @@
 		356D082624775EBC00D08EC6 /* WebRTCMobileDemo */ = {
 			isa = PBXGroup;
 			children = (
+				35EB107524A02B6A00E63545 /* Models */,
+				35EB107224A02AA300E63545 /* Extensions */,
+				356D0845247793AE00D08EC6 /* Socket */,
 				35AFCCD0247AEE4400A02D9B /* WebRTC */,
 				35722FEB2479EF3D00148880 /* UI */,
-				356D0845247793AE00D08EC6 /* Socket */,
 				356D082724775EBC00D08EC6 /* AppDelegate.swift */,
 				356D082B24775EBC00D08EC6 /* ViewController.swift */,
 				356D083C2477618A00D08EC6 /* AuthorizationResponse.swift */,
@@ -141,6 +161,7 @@
 				35DE6DB5248487E400C41906 /* Offer.swift */,
 				35DE6DB724848C3000C41906 /* Error.swift */,
 				35CB1755248C4289004D3378 /* State.swift */,
+				35EB107E24A04B6000E63545 /* WebSocketProviderObserver.swift */,
 			);
 			path = Socket;
 			sourceTree = "<group>";
@@ -148,14 +169,15 @@
 		35722FEB2479EF3D00148880 /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				356D083B2477618900D08EC6 /* EnterRoomViewController.swift */,
-				35722FF4247A4B4F00148880 /* EnterRoomViewController.xib */,
-				35722FEC2479EF5B00148880 /* VideoViewController.swift */,
-				35722FF2247A4B4300148880 /* VideoViewController.xib */,
+				35EB106D24A007C800E63545 /* Chat */,
+				35EB106C24A007BB00E63545 /* Video */,
+				35EB106B24A007B200E63545 /* EnterRoom */,
 				35CB174F248C25C3004D3378 /* AlertableController.swift */,
 				35CB1751248C2FA6004D3378 /* RoundButton.swift */,
 				35CB1753248C3657004D3378 /* TextField.swift */,
 				35CB1759248C4F82004D3378 /* LoadableController.swift */,
+				35AEEF422494B57D00DF7F40 /* MeetingState.swift */,
+				35A387FC2495C9D6003753F5 /* JoiningState.swift */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -174,6 +196,51 @@
 				35F2B7A6248F447E00AB4EFD /* JoinEvent.swift */,
 			);
 			path = WebRTC;
+			sourceTree = "<group>";
+		};
+		35EB106B24A007B200E63545 /* EnterRoom */ = {
+			isa = PBXGroup;
+			children = (
+				356D083B2477618900D08EC6 /* EnterRoomViewController.swift */,
+				35722FF4247A4B4F00148880 /* EnterRoomViewController.xib */,
+			);
+			path = EnterRoom;
+			sourceTree = "<group>";
+		};
+		35EB106C24A007BB00E63545 /* Video */ = {
+			isa = PBXGroup;
+			children = (
+				35722FEC2479EF5B00148880 /* VideoViewController.swift */,
+				35722FF2247A4B4300148880 /* VideoViewController.xib */,
+			);
+			path = Video;
+			sourceTree = "<group>";
+		};
+		35EB106D24A007C800E63545 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				35EB106E24A007D600E63545 /* ChatViewController.swift */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		35EB107224A02AA300E63545 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				35EB107324A02AB800E63545 /* DateFormatter.swift */,
+				35EB107824A02EA200E63545 /* UIColor.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		35EB107524A02B6A00E63545 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				35EB107624A02B7300E63545 /* ChatMessage.swift */,
+				35EB107A24A02F1800E63545 /* SampleData.swift */,
+				35EB107C24A02F5D00E63545 /* Lorem.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		3F0AB2EC6C42BBC180EFD35F /* Pods */ = {
@@ -212,7 +279,7 @@
 			);
 			name = WebRTCMobileDemo;
 			productName = WebRTCMobileDemo;
-			productReference = 356D082424775EBC00D08EC6 /* WebRTCMobileDemo.app */;
+			productReference = 356D082424775EBC00D08EC6 /* WebRTC Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -309,25 +376,33 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				35EB107924A02EA200E63545 /* UIColor.swift in Sources */,
+				35EB107424A02AB800E63545 /* DateFormatter.swift in Sources */,
 				35CB175A248C4F82004D3378 /* LoadableController.swift in Sources */,
 				356D082C24775EBC00D08EC6 /* ViewController.swift in Sources */,
 				356D082824775EBC00D08EC6 /* AppDelegate.swift in Sources */,
 				356D0847247793C900D08EC6 /* WebSocketProvider.swift in Sources */,
 				35CB1754248C3657004D3378 /* TextField.swift in Sources */,
+				35EB107724A02B7300E63545 /* ChatMessage.swift in Sources */,
+				35EB107B24A02F1800E63545 /* SampleData.swift in Sources */,
 				356D084F2477978A00D08EC6 /* SdpType.swift in Sources */,
 				35DE6DB6248487E400C41906 /* Offer.swift in Sources */,
 				35722FF1247A31CB00148880 /* Config.swift in Sources */,
 				356D083E2477618A00D08EC6 /* AuthorizationResponse.swift in Sources */,
 				356D084224776DB900D08EC6 /* URLComponents+Extension.swift in Sources */,
 				35CB1750248C25C3004D3378 /* AlertableController.swift in Sources */,
+				35A387FD2495C9D6003753F5 /* JoiningState.swift in Sources */,
 				35722FEF2479FD3300148880 /* SocketIOWebSocket.swift in Sources */,
 				35F2B7A7248F447E00AB4EFD /* JoinEvent.swift in Sources */,
 				356D08492477947D00D08EC6 /* SignalingClient.swift in Sources */,
 				35722FEA2479C06900148880 /* RTCStates.swift in Sources */,
+				35EB107F24A04B6000E63545 /* WebSocketProviderObserver.swift in Sources */,
 				35722FED2479EF5B00148880 /* VideoViewController.swift in Sources */,
 				356D0851247797F400D08EC6 /* IceCandidate.swift in Sources */,
+				35AEEF432494B57D00DF7F40 /* MeetingState.swift in Sources */,
 				35AFCCD2247B2EDF00A02D9B /* NavigationController.swift in Sources */,
 				356D084B2477975600D08EC6 /* Message.swift in Sources */,
+				35EB107D24A02F5D00E63545 /* Lorem.swift in Sources */,
 				356D084D2477977900D08EC6 /* SessionDescription.swift in Sources */,
 				35CB1752248C2FA6004D3378 /* RoundButton.swift in Sources */,
 				356D083D2477618A00D08EC6 /* EnterRoomViewController.swift in Sources */,
@@ -337,6 +412,7 @@
 				35DE6DB824848C3000C41906 /* Error.swift in Sources */,
 				35CB1756248C4289004D3378 /* State.swift in Sources */,
 				356D084424776E0F00D08EC6 /* AuthorizationService.swift in Sources */,
+				35EB106F24A007D600E63545 /* ChatViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -482,8 +558,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.landgorilla.carlosduclos.WebRTCMobileDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.landgorilla.webrtcdemo;
+				PRODUCT_NAME = "WebRTC Demo";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -503,8 +579,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.landgorilla.carlosduclos.WebRTCMobileDemo;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.landgorilla.webrtcdemo;
+				PRODUCT_NAME = "WebRTC Demo";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

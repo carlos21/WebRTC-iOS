@@ -26,6 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         self.window = window
         
         IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.disabledDistanceHandlingClasses = [ChatViewController.self]
         
         return true
     }

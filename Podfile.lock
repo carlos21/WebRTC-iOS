@@ -1,6 +1,11 @@
 PODS:
   - GoogleWebRTC (1.1.29400)
+  - InputBarAccessoryView (4.3.2):
+    - InputBarAccessoryView/Core (= 4.3.2)
+  - InputBarAccessoryView/Core (4.3.2)
   - IQKeyboardManagerSwift (6.5.5)
+  - MessageKit (3.1.0):
+    - InputBarAccessoryView (~> 4.3.0)
   - SkyFloatingLabelTextField (3.8.0)
   - SnapKit (5.0.1)
   - Socket.IO-Client-Swift (15.2.0):
@@ -11,6 +16,7 @@ PODS:
 DEPENDENCIES:
   - GoogleWebRTC
   - IQKeyboardManagerSwift
+  - MessageKit
   - SkyFloatingLabelTextField (from `https://github.com/Skyscanner/SkyFloatingLabelTextField`)
   - SnapKit
   - Socket.IO-Client-Swift
@@ -19,7 +25,9 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - GoogleWebRTC
+    - InputBarAccessoryView
     - IQKeyboardManagerSwift
+    - MessageKit
     - SnapKit
     - Socket.IO-Client-Swift
     - Starscream
@@ -36,13 +44,15 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   GoogleWebRTC: cfb83bc346435a17fe06bb05f04ad826b858a7fb
+  InputBarAccessoryView: 7985d418040a05fe894bd4b8328dd43ab35517c3
   IQKeyboardManagerSwift: 0fb93310284665245591f50f7a5e38de615960b7
+  MessageKit: 3beb578737a5aa2bba25cc27c7b6d6faa09af5a7
   SkyFloatingLabelTextField: 5a338412114808e961fe2d14ea2c5452c8b6e4aa
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   Socket.IO-Client-Swift: 1e3e3a1f09f3312a167f0d781eb2f383d477357c
   Starscream: 4bb2f9942274833f7b4d296a55504dcfc7edb7b0
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
 
-PODFILE CHECKSUM: 3e2fdbcd061ba2e4d7b04ce4f013103d431f42af
+PODFILE CHECKSUM: f6d712107737341476faa08cec24ec0cb171fe4c
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.3

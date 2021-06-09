@@ -8,6 +8,7 @@
 
 import Foundation
 import WebRTC
+import AVFoundation
 
 protocol WebRTCClientDelegate: class {
     
@@ -21,6 +22,7 @@ final class WebRTCClient: NSObject {
     
     // MARK: Properties
     
+    let streamId = "stream"
     private static let factory: RTCPeerConnectionFactory = {
         RTCInitializeSSL()
         let videoEncoderFactory = RTCDefaultVideoEncoderFactory()
@@ -30,15 +32,19 @@ final class WebRTCClient: NSObject {
     }()
     
     weak var delegate: WebRTCClientDelegate?
+    private var cameraPosition: AVCaptureDevice.Position = .unspecified
     private let peerConnection: RTCPeerConnection
     private let rtcAudioSession = RTCAudioSession.sharedInstance()
-    private let audioQueue = DispatchQueue(label: "audio")
+    private let audioQueue = DispatchQueue(label: "com.landgorilla.webrtcdemo.audio")
+    private let videoQueue = DispatchQueue(label: "com.landgorilla.webrtcdemo.video")
     private let mediaConstraints = [
         kRTCMediaConstraintsOfferToReceiveAudio: kRTCMediaConstraintsValueTrue,
         kRTCMediaConstraintsOfferToReceiveVideo: kRTCMediaConstraintsValueTrue
     ]
     
+    private var camera: Camera = .front
     private var videoCapturer: RTCVideoCapturer?
+    private var rtpVideoSender: RTCRtpSender?
     private var localVideoTrack: RTCVideoTrack?
     private var remoteVideoTrack: RTCVideoTrack?
     private var localDataChannel: RTCDataChannel?
@@ -55,8 +61,10 @@ final class WebRTCClient: NSObject {
         let constraints = RTCMediaConstraints(mandatoryConstraints: nil,
         optionalConstraints: ["DtlsSrtpKeyAgreement": kRTCMediaConstraintsValueTrue])
         
+        let iceServer = RTCIceServer(urlStrings: iceServers, username: "guest", credential: "somepassword")
         let config = RTCConfiguration()
-        config.iceServers = [RTCIceServer(urlStrings: iceServers)]
+        config.iceTransportPolicy = .all
+        config.iceServers = [iceServer]
         config.sdpSemantics = .unifiedPlan
         config.continualGatheringPolicy = .gatherContinually
         
@@ -105,36 +113,62 @@ final class WebRTCClient: NSObject {
     
     // MARK: Media
     
-    func startCaptureLocalVideo(renderer: RTCVideoRenderer) {
+    func captureCamera(cameraPosition: AVCaptureDevice.Position, completion: ((Result<Void, Error>) -> Void)? = nil) {
         guard let capturer = self.videoCapturer as? RTCCameraVideoCapturer else { return }
-        guard let camera = (RTCCameraVideoCapturer.captureDevices().first { $0.position == .back }) else { return }
+        guard self.cameraPosition != cameraPosition else { return }
         
-        // choose highest res
-        let formats = RTCCameraVideoCapturer.supportedFormats(for: camera).sorted { (f1, f2) -> Bool in
-            let width1 = CMVideoFormatDescriptionGetDimensions(f1.formatDescription).width
-            let width2 = CMVideoFormatDescriptionGetDimensions(f2.formatDescription).width
-            return width1 < width2
+        capturer.stopCapture {
+            
+            guard let camera = (RTCCameraVideoCapturer.captureDevices().first { $0.position == cameraPosition }) else { return }
+            
+            // choose highest res
+            let formats = RTCCameraVideoCapturer.supportedFormats(for: camera).sorted { (f1, f2) -> Bool in
+                let width1 = CMVideoFormatDescriptionGetDimensions(f1.formatDescription).width
+                let width2 = CMVideoFormatDescriptionGetDimensions(f2.formatDescription).width
+                return width1 < width2
+            }
+            guard
+                let format = formats.filter({
+                    let height = CMVideoFormatDescriptionGetDimensions($0.formatDescription).height
+                    let width = CMVideoFormatDescriptionGetDimensions($0.formatDescription).width
+                    let size = max(height, width)
+                    return (100 ... 1080).contains(size)
+                }).last
+            else {
+                return
+            }
+            
+            // choose highest fps
+            let fps = format.videoSupportedFrameRateRanges.sorted { return $0.maxFrameRate < $1.maxFrameRate }.last
+            
+            capturer.startCapture(with: camera, format: format, fps: Int(fps!.maxFrameRate)) { error in
+//                print("Q MIERDA?", error)
+                self.cameraPosition = cameraPosition
+                completion?(.success(()))
+            }
         }
-        guard
-            let format = formats.filter({
-                let height = CMVideoFormatDescriptionGetDimensions($0.formatDescription).height
-                let width = CMVideoFormatDescriptionGetDimensions($0.formatDescription).width
-                let size = max(height, width)
-                return (100 ... 1080).contains(size)
-            }).last
-        else {
-            return
-        }
-        
-        // choose highest fps
-        let fps = (format.videoSupportedFrameRateRanges.sorted { return $0.maxFrameRate < $1.maxFrameRate }.last)
-        
-        capturer.startCapture(with: camera, format: format, fps: Int(fps!.maxFrameRate))
+    }
+    
+    func startCaptureLocalVideo(renderer: RTCVideoRenderer, cameraPosition: AVCaptureDevice.Position = .front) {
+        self.captureCamera(cameraPosition: cameraPosition)
         self.localVideoTrack?.add(renderer)
     }
     
     func renderRemoteVideo(to renderer: RTCVideoRenderer) {
         self.remoteVideoTrack?.add(renderer)
+    }
+    
+    func toggleCamera(completion: ((Result<Void, Error>) -> Void)? = nil) {
+        let position: AVCaptureDevice.Position
+        switch self.cameraPosition {
+        case .back:
+            position = .front
+            
+        default:
+            position = .back
+        }
+        
+        captureCamera(cameraPosition: position, completion: completion)
     }
     
     private func configureAudioSession() {
@@ -149,7 +183,6 @@ final class WebRTCClient: NSObject {
     }
     
     func createMediaSenders() {
-        let streamId = "stream"
         
         // Audio
         let audioTrack = self.createAudioTrack()
@@ -157,8 +190,8 @@ final class WebRTCClient: NSObject {
         
         // Video
         let videoTrack = self.createVideoTrack()
-        self.localVideoTrack = videoTrack
-        self.peerConnection.add(videoTrack, streamIds: [streamId])
+        addVideoTrack(videoTrack)
+        
         self.remoteVideoTrack = self.peerConnection.transceivers.first(where: {
             $0.mediaType == .video
         })?.receiver.track as? RTCVideoTrack;
@@ -168,6 +201,16 @@ final class WebRTCClient: NSObject {
             dataChannel.delegate = self
             self.localDataChannel = dataChannel
         }
+    }
+    
+    private func addVideoTrack(_ videoTrack: RTCVideoTrack) {
+        self.localVideoTrack = videoTrack
+        self.rtpVideoSender = self.peerConnection.add(videoTrack, streamIds: [streamId])
+    }
+    
+    private func removeCurrentVideoTrack() {
+        guard let rtpVideoSender =  self.rtpVideoSender else { return }
+        self.peerConnection.removeTrack(rtpVideoSender)
     }
     
     private func createAudioTrack() -> RTCAudioTrack {
@@ -236,7 +279,7 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didRemove stream: RTCMediaStream) {
-        debugPrint("peerConnection did remote stream")
+        debugPrint("peerConnection did remove stream")
     }
     
     func peerConnectionShouldNegotiate(_ peerConnection: RTCPeerConnection) {
@@ -245,7 +288,11 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceConnectionState) {
         debugPrint("peerConnection new connection state: \(newState)")
-        self.delegate?.webRTCClient(self, didChangeConnectionState: newState)
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.webRTCClient(self, didChangeConnectionState: newState)
+        }
     }
     
     func peerConnection(_ peerConnection: RTCPeerConnection, didChange newState: RTCIceGatheringState) {
@@ -268,12 +315,12 @@ extension WebRTCClient: RTCPeerConnectionDelegate {
 
 extension WebRTCClient {
     
-    func muteAudio() {
-        self.setAudioEnabled(false)
+    func enableAudio(flag: Bool) {
+        self.setAudioEnabled(flag)
     }
     
-    func unmuteAudio() {
-        self.setAudioEnabled(true)
+    func enableVideo(flag: Bool) {
+        self.localVideoTrack?.isEnabled = flag
     }
     
     // Fallback to the default playing device: headphones/bluetooth/ear speaker
@@ -323,5 +370,14 @@ extension WebRTCClient: RTCDataChannelDelegate {
     
     func dataChannel(_ dataChannel: RTCDataChannel, didReceiveMessageWith buffer: RTCDataBuffer) {
         self.delegate?.webRTCClient(self, didReceiveData: buffer.data)
+    }
+}
+
+extension WebRTCClient {
+    
+    enum Camera {
+        
+        case front
+        case back
     }
 }
