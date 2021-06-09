@@ -570,7 +570,8 @@
 			baseConfigurationReference = E081147E83A4A62F364D6FB4 /* Pods-WebRTCMobileDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = A5FP7L6CSA;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = WebRTCMobileDemo/Info.plist;
@@ -581,6 +582,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.landgorilla.webrtcdemo;
 				PRODUCT_NAME = "WebRTC Demo";
+				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.landgorilla.webrtcdemo";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

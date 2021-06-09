@@ -1,22 +1,41 @@
 require "pathname"
 
-fastlane_version "2.145.0"
+fastlane_version "2.181.0"
 default_platform :ios
-xcversion(version: "11.5")
+xcversion(version: "12.4")
 setup_jenkins(derived_data_path: "./DerivedData")
 
 platform :ios do
 
     before_all do
-        ENV["FASTLANE_DONT_STORE_PASSWORD"] = "0"
-        ENV["FASTLANE_USER"] = "darkzeratul64@gmail.com"
-        ENV["FASTLANE_PASSWORD"] = "MiPuchuxD21"
-        ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = "smlj-zsnt-vosu-fdoq"
-        ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
+        # Dotenv.load ".env.ios"
+        # ENV["FASTLANE_DONT_STORE_PASSWORD"] = "0"
+        # ENV["FASTLANE_USER"] = "darkzeratul64@gmail.com"
+        # ENV["FASTLANE_PASSWORD"] = "MiPuchuxD21"
+        # ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = "smlj-zsnt-vosu-fdoq"
+        # ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
     end
 
     after_all do |lane|
       
+    end
+
+    lane :deploy_testflight do
+        match(type: "appstore", force_for_new_devices: true)
+    end
+
+    lane :deploy_firebase do
+        register_devices(devices_file: "./devices.txt")
+        match(type: "adhoc", force_for_new_devices: true)
+    end
+
+    lane :signing do
+        sync_code_signing #match
+
+        mapping = Actions.lane_context[SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING]
+        update_code_signing_settings(
+            profile_name: mapping[ENV['MATCH_APP_IDENTIFIER']]
+        )
     end
 
     desc "Generate IPA file - UAT"

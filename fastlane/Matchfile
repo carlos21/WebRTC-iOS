@@ -1,0 +1,9 @@
+git_url("git@bitbucket.org:landgorilla/mobile-app-credentials.git")
+
+storage_mode("git")
+
+type("appstore") # appstore, adhoc, enterprise or development
+
+app_identifier(["com.landgorilla.webrtcdemo"])
+username("cduclos@landgorilla.com") # Your Apple Developer Portal username
+keychain_password("777000xD")
