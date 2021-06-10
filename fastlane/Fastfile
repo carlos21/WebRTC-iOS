@@ -10,9 +10,9 @@ platform :ios do
     before_all do
         # Dotenv.load ".env.ios"
         # ENV["FASTLANE_DONT_STORE_PASSWORD"] = "0"
-        # ENV["FASTLANE_USER"] = "darkzeratul64@gmail.com"
+        ENV["FASTLANE_USER"] = "darkzeratul64@gmail.com"
         # ENV["FASTLANE_PASSWORD"] = "MiPuchuxD21"
-        # ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = "smlj-zsnt-vosu-fdoq"
+        ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = "smlj-zsnt-vosu-fdoq"
         # ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "120"
     end
 
@@ -21,12 +21,13 @@ platform :ios do
     end
 
     lane :deploy_testflight do
-        match(type: "appstore", force_for_new_devices: true)
+        certs_appstore
+        build_for_testflight
+        upload_testflight
     end
 
     lane :deploy_firebase do
-        register_devices(devices_file: "./devices.txt")
-        match(type: "adhoc", force_for_new_devices: true)
+
     end
 
     lane :signing do
@@ -38,20 +39,46 @@ platform :ios do
         )
     end
 
-    desc "Generate IPA file - UAT"
-    lane :uat do
-        # match(type: "appstore") # more information: https://codesigning.guide
-        # build your iOS app
+    desc "Fetches the provisioning profiles so you can build locally and deploy to your device"
+    lane :certs_dev do
+        match(
+            app_identifier: "com.landgorilla.webrtcdemo",
+            type: "development", 
+            force_for_new_devices: true,
+            readonly: true
+        )
+    end
+
+    desc "Fetches the provisioning profiles so you can build for distribution outside the appstore"
+    lane :certs_adhoc do
+        register_devices(devices_file: "./devices.txt")
+        match(
+            app_identifier: "com.landgorilla.webrtcdemo",
+            type: "adhoc", 
+            force_for_new_devices: true
+        )
+    end
+
+    desc "Fetches the provioning profiles so you can build and deploy to the appstore"
+    lane :certs_appstore do
+        match(
+            app_identifier: "com.landgorilla.webrtcdemo",
+            type: "appstore",
+            readonly: true
+        )
+    end
+
+    desc "Builds the app for testflight"
+    lane :build_for_testflight do
         gym(
             configuration: "WebRTC UAT",
             workspace: "WebRTCMobileDemo.xcworkspace",
-            scheme: "WebRTC UAT",
+            scheme: "WebRTCMobileDemo",
             silent: true,
             clean: true,
             output_directory: "./build",
-            output_name: "WebRTC.ipa",
-            export_method: "app-store",
-            export_options: "fastlane/ExportOptionsAppStore.plist"
+            output_name: "WebRTC-testflight.ipa",
+            export_method: "app-store"
         )
     end
 
@@ -62,10 +89,83 @@ platform :ios do
         upload_testflight()
     end
 
+    desc "Uploads to TestFlight"
     lane :upload_testflight do |options|
         upload_to_testflight(
-            ipa: './build/WebRTC.ipa',
+            ipa: './build/WebRTC-testflight.ipa',
             skip_submission: true
+        )
+    end
+
+    desc "Uploads to Firebase"
+    lane :upload_firebase do |options|
+        path = "./WebRTC-testflight.ipa"
+        firebase_app_distribution(
+            app: "",
+            groups: "Testers",
+            firebase_cli_path: "/usr/local/bin/firebase",
+            ipa_path: path
+        )
+    end
+
+    lane :set_version do |params|
+        version = params[:v]
+        increment_build_number
+        increment_version_number(version_number: version)
+        commit_version_bump(
+            message: "Prepare version v#{version} for next release",
+            force: true,
+            xcodeproj: "WebRTCMobileDemo.xcodeproj"
+        )
+    end
+
+    lane :increment_build do |params|
+        version = get_version_number(target: "WebRTCMobileDemo")
+        increment_build_number
+        build_number_after_increment = get_build_number
+        commit_version_bump(
+            message: "New build #{build_number_after_increment} - v#{version}",
+            force: true,
+            xcodeproj: "WebRTCMobileDemo.xcodeproj"
+        )
+        push_to_git_remote
+    end
+
+    lane :increment_version do |params|
+        increment_build_number
+        build_number_after_increment = get_build_number
+        commit_version_bump(
+            message: "Prepare build for next release #{build_number_after_increment}",
+            force: true,
+            xcodeproj: "WebRTCMobileDemo.xcodeproj"
+        )
+        push_to_git_remote
+    end
+
+    desc "Upload any dsyms in the current directory to Firebase"
+    lane :upload_dsyms do |options|
+        version_number = get_version_number(target: "WebRTCMobileDemo")
+        build_number = get_build_number
+        download_dsyms(
+            app_identifier: "com.landgorilla.webrtcdemo",
+            version: version_number,
+            build_number: build_number
+        )
+        # upload to firebase
+    end
+
+    desc "Firebase App Distribution"
+    lane :ci_adhoc_build do
+        build_config = "adhoc"
+        schemes = {
+            "WebRTCMobileDemo" => "com.landgorilla.webrtcdemo"
+        }
+        auto_increment_version(tagPrefix: ReleaseTagPrefix::FIREBASE)
+        ci_build(
+            schemes: schemes, 
+            config: build_config,
+            export: "ad-hoc",
+            bitcode: "false"
         )
     end
 
